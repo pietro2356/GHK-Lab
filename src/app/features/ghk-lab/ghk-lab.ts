@@ -1,9 +1,9 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import {Header} from '@app/layout/header/header';
-import {IonCardWindow} from '@app/layout/ion-card-window/ion-card-window';
-import {Results} from '@app/layout/results/results';
-import {IonCard} from '@ui/ion-card/ion-card';
-import {Ion} from '@core/models/Ion';
+import { IonCard } from '@ui/ion-card/ion-card';
+import { Ion } from '@core/models/Ion';
+import { Header } from '@layout/header/header';
+import { IonCardWindow } from '@layout/ion-card-window/ion-card-window';
+import { Results } from '@layout/results/results';
 
 @Component({
   selector: 'ghk-ghk-lab',
@@ -11,11 +11,16 @@ import {Ion} from '@core/models/Ion';
     Header,
     IonCardWindow,
     Results,
-    IonCard
+    IonCard,
+    Header,
+    Header,
+    Header,
+    IonCardWindow,
+    Results,
   ],
   templateUrl: './ghk-lab.html',
   styleUrl: './ghk-lab.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GhkLab {
   ion: Ion = {
@@ -24,6 +29,6 @@ export class GhkLab {
     charge: '+',
     permeability: 1,
     concentrationOut: 10,
-    concentrationIn: 100
+    concentrationIn: 100,
   };
 }
