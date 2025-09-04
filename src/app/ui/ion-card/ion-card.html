@@ -1,96 +1,109 @@
 @let ion = ionIn();
 <p-card [style]="{ width: '25rem', overflow: 'hidden' }">
   <ng-template #header>
-    {{ion.uuid}}
+    <p class="font-medium text-gray-500">{{ion.uuid}}</p>
   </ng-template>
-  <ng-template #title
-    class="flex flex-column gap-2"
-  >
-    <input type="text" pInputText [(ngModel)]="ion.name" placeholder="Nome dello ione"/>
-    <p-selectbutton
-      [options]="chargeOptions"
-      [(ngModel)]="ionIn().charge"
-    />
+  <ng-template #title >
+    <div class="flex flex-column justify-end-safe gap-2">
+      <input type="text" pInputText [(ngModel)]="ion.name" placeholder="Nome dello ione"/>
+      <p-selectbutton
+        [options]="chargeOptions"
+        [(ngModel)]="ionIn().charge"
+      />
+    </div>
   </ng-template>
   <ng-template #content>
-
-    <div class="flex flex-row gap-4 justify-center item-center d">
-      <p>P ione:</p>
-      <p-slider
-        [(ngModel)]="ion.permeability"
-        style="width: 100%"
-        [min]="PERMEABILITY_MIN_VALUE"
-        [max]="PERMEABILITY_MAX_VALUE"
-      />
-      <p-inputnumber
-        [(ngModel)]="ion.permeability"
-        [showButtons]="true"
-        buttonLayout="horizontal"
-        spinnerMode="vertical"
-        inputId="vertical"
-        [inputStyle]="{ width: '4rem' }"
-      >
-        <ng-template #incrementbuttonicon>
-          <span class="pi pi-plus"></span>
-        </ng-template>
-        <ng-template #decrementbuttonicon>
-          <span class="pi pi-minus"></span>
-        </ng-template>
-      </p-inputnumber>
+    <div class="mb-2 mt-2">
+      <p>Permeabilità ione:</p>
+      <div class="flex flex-row justify-items-center items-center gap-4">
+        <p-slider
+          [(ngModel)]="ion.permeability"
+          style="width: 100%"
+          [min]="PERMEABILITY_MIN_VALUE"
+          [max]="PERMEABILITY_MAX_VALUE"
+        />
+        <p-inputnumber
+          [(ngModel)]="ion.permeability"
+          [showButtons]="true"
+          buttonLayout="horizontal"
+          spinnerMode="vertical"
+          inputId="vertical"
+          [inputStyle]="{ width: '4rem' }"
+          [min]="PERMEABILITY_MIN_VALUE"
+          [max]="PERMEABILITY_MAX_VALUE"
+        >
+          <ng-template #incrementbuttonicon>
+            <span class="pi pi-plus"></span>
+          </ng-template>
+          <ng-template #decrementbuttonicon>
+            <span class="pi pi-minus"></span>
+          </ng-template>
+        </p-inputnumber>
+      </div>
     </div>
 
-    <div class="card__flex">
-      <p>C In:</p>
-      <p-slider
-        [(ngModel)]="ion.concentrationIn"
-        style="width: 100%"
-        [min]="CONC_IN_MIN_VALUE"
-        [max]="CONC_IN_MAX_VALUE" />
-      <p-inputnumber
-        [(ngModel)]="ion.concentrationIn"
-        [showButtons]="true"
-        buttonLayout="horizontal"
-        spinnerMode="vertical"
-        inputId="vertical"
-        [inputStyle]="{ width: '4rem' }"
-      >
-        <ng-template #incrementbuttonicon>
-          <span class="pi pi-plus"></span>
-        </ng-template>
-        <ng-template #decrementbuttonicon>
-          <span class="pi pi-minus"></span>
-        </ng-template>
-      </p-inputnumber>
-    </div>
-    <div class="card__flex">
-      <p>C Out: </p>
-      <p-slider
-        [(ngModel)]="ion.concentrationOut"
-        style="width: 100%"
-        [min]="CONC_OUT_MIN_VALUE"
-        [max]="CONC_OUT_MAX_VALUE" />
-      <p-inputnumber
-        [(ngModel)]="ion.concentrationOut"
-        [showButtons]="true"
-        buttonLayout="horizontal"
-        spinnerMode="vertical"
-        inputId="vertical"
-        [inputStyle]="{ width: '4rem' }"
-      >
-        <ng-template #incrementbuttonicon>
-          <span class="pi pi-plus"></span>
-        </ng-template>
-        <ng-template #decrementbuttonicon>
-          <span class="pi pi-minus"></span>
-        </ng-template>
-      </p-inputnumber>
+    <div class="mb-2">
+      <p>Concentrazione In:</p>
+      <div class="flex flex-row justify-items-center items-center gap-4">
+        <p-slider
+          [(ngModel)]="ion.concentrationIn"
+          style="width: 100%"
+          [min]="CONC_IN_MIN_VALUE"
+          [max]="CONC_IN_MAX_VALUE"
+        />
+        <p-inputnumber
+          [(ngModel)]="ion.concentrationIn"
+          [showButtons]="true"
+          buttonLayout="horizontal"
+          spinnerMode="vertical"
+          inputId="vertical"
+          [inputStyle]="{ width: '4rem' }"
+          [min]="CONC_IN_MIN_VALUE"
+          [max]="CONC_IN_MAX_VALUE"
+        >
+          <ng-template #incrementbuttonicon>
+            <span class="pi pi-plus"></span>
+          </ng-template>
+          <ng-template #decrementbuttonicon>
+            <span class="pi pi-minus"></span>
+          </ng-template>
+        </p-inputnumber>
+      </div>
     </div>
 
+    <div class="mb-2">
+      <p>Concentrazione Out: </p>
+      <div class="flex flex-row justify-items-center items-center gap-4">
+        <p-slider
+          [(ngModel)]="ion.concentrationOut"
+          style="width: 100%"
+          [min]="CONC_OUT_MIN_VALUE"
+          [max]="CONC_OUT_MAX_VALUE"
+        />
+        <p-inputnumber
+          [(ngModel)]="ion.concentrationOut"
+          [showButtons]="true"
+          buttonLayout="horizontal"
+          spinnerMode="vertical"
+          inputId="vertical"
+          [inputStyle]="{ width: '4rem' }"
+          [min]="CONC_OUT_MIN_VALUE"
+          [max]="CONC_OUT_MAX_VALUE"
+        >
+          <ng-template #incrementbuttonicon>
+            <span class="pi pi-plus"></span>
+          </ng-template>
+          <ng-template #decrementbuttonicon>
+            <span class="pi pi-minus"></span>
+          </ng-template>
+        </p-inputnumber>
+      </div>
+    </div>
   </ng-template>
 
   <ng-template #footer>
-    <div class="flex gap-4 mt-1">
-      <p-button label="Rimuovi" class="w-full" styleClass="w-full" (onClick)="removeCard()"/>
+    <div class="mt-1 flex justify-end">
+      <p-button label="Rimuovi" severity="secondary" (onClick)="removeCard()"/>
     </div>
   </ng-template>
 </p-card>
