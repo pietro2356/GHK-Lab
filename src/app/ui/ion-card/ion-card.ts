@@ -17,7 +17,7 @@ import {Ion} from '../../core/models/Ion';
 
 
 @Component({
-  selector: 'app-ion-card',
+  selector: 'ghk-ion-card',
   imports: [InputTextModule, SelectButtonModule, SliderModule, CardModule, ButtonModule, FormsModule, InputNumberModule],
   templateUrl: './ion-card.html',
   styleUrl: './ion-card.scss',
