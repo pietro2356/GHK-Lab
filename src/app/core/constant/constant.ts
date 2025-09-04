@@ -1,3 +1,6 @@
+export const GAS_CONSTANT: number = 8.314; // J/(K*mol)
+export const FARADAY_CONSTANT: number = 96485.3365; // C/mol
+
 export const PERMEABILITY_MIN_VALUE = 1;
 export const PERMEABILITY_MAX_VALUE = 999;
 
