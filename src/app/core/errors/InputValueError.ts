@@ -1,4 +1,4 @@
-class InputValueError extends Error {
+export class InputValueError extends Error {
   constructor(message: string) {
     super(message);
     this.name = 'InputValueError';

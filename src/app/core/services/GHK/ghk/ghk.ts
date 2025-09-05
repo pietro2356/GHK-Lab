@@ -13,6 +13,8 @@ import {
   PERMEABILITY_MAX_VALUE,
   PERMEABILITY_MIN_VALUE,
 } from '@core/constant/constant';
+import { InputValueError } from '@core/errors/InputValueError';
+import { CalculationError } from '@core/errors/CalculationError';
 
 @Injectable({
   providedIn: 'root',
