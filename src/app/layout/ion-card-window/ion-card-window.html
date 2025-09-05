@@ -1,1 +1,16 @@
-<p>ion-card-window works!</p>
+<input type="number" [(ngModel)]="ghkSrv.temperature" class="border p-2" placeholder="Temperature (K)"/>
+<p-button label="Add Ion" (onClick)="ghkSrv.addEmptyIon()"/>
+<!--<ghk-ion-card [ionIn]="ion"/>-->
+<div class="flex flex-row flex-wrap gap-4 mt-4">
+  @for (ion of ghkSrv.ionList(); track ion.getUUID()) {
+    <ghk-ion-card [ionIn]="ion"/>
+    <!--    <div class="border p-2 flex flex-wrap gap-2 w-sm">-->
+      <!--      @let ionInfo = ghkSrv.getIonInfo(ion.getUUID());-->
+      <!--      @if (ionInfo) {-->
+      <!--        <p>-->
+      <!--          <span class="font-bold">Ion:</span> {{ionInfo.name}} ({{ionInfo.charge}}) - Conc: {{ion.getPermeability()}} mM-->
+      <!--        </p>-->
+      <!--      }-->
+      <!--    </div>-->
+  }
+</div>

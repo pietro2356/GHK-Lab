@@ -1,1 +1,31 @@
-<p>results works!</p>
+@let res = ghkSrv.results();
+@if (res.ready) {
+  <p class="text-3xl font-bold">
+    Potential: {{res.potential.toFixed(2)}} mV
+  </p>
+  <ul>
+    @for (nRes of res.ionResults; track nRes.uuid) {
+      <li class="flex flex-col gap-0.5">
+        <h3 class="text-3xl text-orange-400 font-bold">
+          {{nRes.name}}:
+        </h3>
+        <div class="flex flex-row gap-2">
+          <p class="font-bold">
+            Nerst Potential:
+          </p>
+          <p class="font-mono text-gray-300">{{nRes.nerstPotential.toFixed(2)}} mV</p>
+        </div>
+        <div class="flex flex-row gap-2">
+          <p class="font-bold">
+            Driving force:
+          </p>
+          <p class="font-mono text-gray-300">{{nRes.drivingForce.toFixed(2)}} mV</p>
+        </div>
+      </li>
+    }
+  </ul>
+}@else{
+  <p class="text-3xl font-bold text-red-400">
+    Results not ready
+  </p>
+}
