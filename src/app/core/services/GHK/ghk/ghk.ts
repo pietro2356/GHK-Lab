@@ -83,7 +83,7 @@ export class GHKervice {
    * @param concentrationIn concentration inside the cell
    * @throws {InputValueError} If any of the input values are invalid
    */
-  public addNewIon(
+  public addNewCustomIon(
     name: string,
     charge: chargeType,
     permeability: number,
@@ -139,6 +139,12 @@ export class GHKervice {
     this.ionList.update((ions) => [...ions, new CIon(newIon)]);
   }
 
+  /**
+   * @public
+   * @description Remove an ion from the ion list
+   * @param ion Ion to be removed
+   * @throws {IonProvidingError} If the ion is undefined
+   */
   public removeIon(ion: CIon): void {
     if (!ion) {
       throw new IonProvidingError('Ion is undefined. Please provide a valid ion.');
