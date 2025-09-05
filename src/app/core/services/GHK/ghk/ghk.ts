@@ -1,9 +1,8 @@
-import { Injectable, signal } from '@angular/core';
-import { chargeType, Ion } from '@core/models/Ion';
-import { ionConfig } from '@core/models/ionConfig';
-import { Results } from '@core/models/Results';
+import { computed, Injectable, signal } from '@angular/core';
+import { chargeType, CIon, Ion } from '@core/models/Ion';
+import { IonResults, Results } from '@core/models/Results';
 
-import { add, format, Fraction, fraction, log, multiply, number } from 'mathjs';
+import { add, format, log, multiply, number, subtract } from 'mathjs';
 import {
   CONC_IN_MAX_VALUE,
   CONC_IN_MIN_VALUE,
@@ -14,15 +13,35 @@ import {
   PERMEABILITY_MIN_VALUE,
 } from '@core/constant/constant';
 import { InputValueError } from '@core/errors/InputValueError';
-import { CalculationError } from '@core/errors/CalculationError';
+import { ionConfig } from '@core/models/ionConfig';
+import { IonProvidingError } from '@core/errors/IonProvidingError';
 
 @Injectable({
   providedIn: 'root',
 })
 export class GHKervice {
-  #ionList = signal<Ion[]>(ionConfig.standardIons);
-  #temperature = signal<number>(310); // K
-  #results = signal<Results>({ ready: false, potential: 0 });
+  public ionList = signal<CIon[]>(ionConfig.standardIons); // ionConfig.standardIons
+  public temperature = signal<number>(310); // K
+
+  public results = computed<Results>(() => {
+    const potential = this.calculateMembranePotential(this.ionList());
+
+    if (potential === null) {
+      return {
+        ready: false,
+        potential: 0,
+        ionResults: [],
+      };
+    }
+
+    const ionResults = this.calculateNerstPotentialAllIon(this.ionList(), potential);
+
+    return {
+      ready: true,
+      potential,
+      ionResults,
+    };
+  });
 
   /**
    * @public
@@ -37,7 +56,7 @@ export class GHKervice {
     }
 
     let res = number(add(multiply(temperature, 1.0), 273.15));
-    this.#temperature.set(number(format(res, { notation: 'fixed', precision: 2 })));
+    this.temperature.set(number(format(res, { notation: 'fixed', precision: 2 })));
   }
 
   /**
@@ -51,7 +70,7 @@ export class GHKervice {
     if (temperature < 0) {
       throw new InputValueError('Temperature cannot be below absolute zero (0 K)');
     }
-    this.#temperature.set(temperature);
+    this.temperature.set(temperature);
   }
 
   /**
@@ -101,7 +120,31 @@ export class GHKervice {
       concentrationOut,
       concentrationIn,
     };
-    this.#ionList.update((ions) => [...ions, newIon]);
+    this.ionList.update((ions) => [...ions, new CIon(newIon)]);
+  }
+
+  /**
+   * @public
+   * @description Add an empty ion to the ion list
+   */
+  public addEmptyIon(): void {
+    const newIon: Ion = {
+      uuid: self.crypto.randomUUID(),
+      name: '',
+      charge: '+',
+      permeability: 1,
+      concentrationOut: 10,
+      concentrationIn: 100,
+    };
+    this.ionList.update((ions) => [...ions, new CIon(newIon)]);
+  }
+
+  public removeIon(ion: CIon): void {
+    if (!ion) {
+      throw new IonProvidingError('Ion is undefined. Please provide a valid ion.');
+    }
+
+    this.ionList.update((ions) => ions.filter((i) => i.getUUID() !== ion.getUUID()));
   }
 
   /**
@@ -109,23 +152,24 @@ export class GHKervice {
    * @description Calculate the membrane potential  using the GHK equation
    * @throws {CalculationError} If the ion list is empty
    */
-  public calculateMembranePotential(): void {
-    if (this.#ionList().length === 0) {
-      throw new CalculationError('Ion list is empty. Please add at least one ion.');
+  public calculateMembranePotential(ionList: CIon[]): number | null {
+    if (ionList.length === 0) {
+      return null;
+      //throw new CalculationError('Ion list is empty. Please add at least one ion.');
     }
 
-    let potential = number(multiply(GAS_CONSTANT, this.#temperature()) / FARADAY_CONSTANT);
+    let potential = number(multiply(GAS_CONSTANT, this.temperature()) / FARADAY_CONSTANT);
     let externalContribution: number = 0;
     let internalContribution: number = 0;
-    for (const ion of this.#ionList()) {
-      if (ion.charge === '-') {
-        externalContribution += multiply(ion.permeability, ion.concentrationIn);
-        internalContribution += multiply(ion.permeability, ion.concentrationOut);
+    for (const ion of ionList) {
+      if (ion.getCharge().includes('-')) {
+        externalContribution += multiply(ion.getPermeability(), ion.getConcentrationIn());
+        internalContribution += multiply(ion.getPermeability(), ion.getConcentrationOut());
         continue;
       }
 
-      externalContribution += multiply(ion.permeability, ion.concentrationOut);
-      internalContribution += multiply(ion.permeability, ion.concentrationIn);
+      externalContribution += multiply(ion.getPermeability(), ion.getConcentrationOut());
+      internalContribution += multiply(ion.getPermeability(), ion.getConcentrationIn());
     }
 
     externalContribution = number(
@@ -135,12 +179,72 @@ export class GHKervice {
       format(internalContribution, { notation: 'fixed', precision: 3 }),
     );
 
-    this.#results.set({
-      ready: true,
-      potential: multiply(
-        multiply(potential, log(externalContribution / internalContribution)),
-        1000,
-      ),
-    });
+    return multiply(multiply(potential, log(externalContribution / internalContribution)), 1000);
+  }
+
+  /**
+   * @public
+   * @description Calculate the Nernst potential for a given ion
+   * @param ion Ion for which to calculate the Nernst potential
+   * @throws {IonProvidingError} If the ion is undefined
+   */
+  public calculateNerstPotential(ion: CIon): number {
+    if (!ion) {
+      throw new IonProvidingError('Ion is undefined. Please provide a valid ion.');
+    }
+
+    let potential = number(
+      multiply(GAS_CONSTANT, this.temperature()) /
+        multiply(ion.getChargeNumber(), FARADAY_CONSTANT),
+    );
+
+    let externalContribution = number(
+      format(ion.getConcentrationOut(), { notation: 'fixed', precision: 3 }),
+    );
+    let internalContribution = number(
+      format(ion.getConcentrationIn(), { notation: 'fixed', precision: 3 }),
+    );
+
+    return multiply(multiply(potential, log(externalContribution / internalContribution)), 1000);
+  }
+
+  /**
+   * @description Calculare the Driving Force for a given ion
+   * @param potential membrane potential
+   * @param nerstPotentialIon Nerst Equilibrium potential of Ion
+   * @private
+   */
+  private calculateDrivingForce(potential: number, nerstPotentialIon: number): number {
+    if (isNaN(potential)) {
+      throw new InputValueError('Provide a valid membrane potential value');
+    }
+
+    return subtract(potential, nerstPotentialIon);
+  }
+
+  /**
+   * @description Calculare the results for all Ion in ionList
+   * @param ionList list of all Ions
+   * @param membranePotential Membrane Potential
+   * @private
+   */
+  private calculateNerstPotentialAllIon(ionList: CIon[], membranePotential: number): IonResults[] {
+    if (ionList.length === 0) {
+      return [];
+    }
+
+    let nerstResults: IonResults[] = [];
+
+    for (const ion of ionList) {
+      let nerstPotential = this.calculateNerstPotential(ion);
+      nerstResults.push({
+        uuid: ion.getUUID(),
+        name: ion.getName(),
+        nerstPotential,
+        drivingForce: this.calculateDrivingForce(membranePotential, nerstPotential),
+      });
+    }
+
+    return nerstResults;
   }
 }
