@@ -4,8 +4,8 @@
 <h1 class="text-3xl font-bold underline">
   Hello world!
 </h1>
-<p-button label="inout" (onClick)="inputErr()"></p-button>
-<p-button label="clalc" (onClick)="calcErr()"></p-button>
+<p-button label="inout" (onClick)="inputErr()"/>
+<p-button label="clalc" (onClick)="calcErr()"/>
 <div class="text-2xl font-bold text-amber-400">
   <math xmlns="http://www.w3.org/1998/Math/MathML" display="block" class="tml-display" style="display:block math;">
     <mrow>
@@ -78,4 +78,54 @@
   </math>
 </div>
 <hr>
-<ghk-ion-card [ionIn]="ion"/>
+@let res = ghkSrv.results();
+@if (res.ready) {
+  <p class="text-3xl font-bold">
+    Potential: {{res.potential.toFixed(2)}} mV
+  </p>
+  <ul>
+    @for (nRes of res.ionResults; track nRes.uuid) {
+      <li class="flex flex-col gap-0.5">
+        <h3 class="text-3xl text-orange-400 font-bold">
+          {{nRes.name}}:
+        </h3>
+        <div class="flex flex-row gap-2">
+          <p class="font-bold">
+            Nerst Potential:
+          </p>
+          <p class="font-mono text-gray-300">{{nRes.nerstPotential.toFixed(2)}} mV</p>
+        </div>
+        <div class="flex flex-row gap-2">
+          <p class="font-bold">
+            Driving force:
+          </p>
+          <p class="font-mono text-gray-300">{{nRes.drivingForce.toFixed(2)}} mV</p>
+        </div>
+      </li>
+    }
+  </ul>
+
+}@else{
+  <p class="text-3xl font-bold text-red-400">
+    Results not ready
+  </p>
+}
+
+<hr>
+<input type="number" [(ngModel)]="ghkSrv.temperature" class="border p-2" placeholder="Temperature (K)"/>
+<p-button label="Add Ion" (onClick)="ghkSrv.addEmptyIon()"/>
+<!--<ghk-ion-card [ionIn]="ion"/>-->
+<div class="flex flex-row flex-wrap gap-4 mt-4">
+  @for (ion of ghkSrv.ionList(); track ion.getUUID()) {
+    <ghk-ion-card [ionIn]="ion"/>
+<!--    <div class="border p-2 flex flex-wrap gap-2 w-sm">-->
+<!--      @let ionInfo = ghkSrv.getIonInfo(ion.getUUID());-->
+<!--      @if (ionInfo) {-->
+<!--        <p>-->
+<!--          <span class="font-bold">Ion:</span> {{ionInfo.name}} ({{ionInfo.charge}}) - Conc: {{ion.getPermeability()}} mM-->
+<!--        </p>-->
+<!--      }-->
+<!--    </div>-->
+  }
+</div>
+

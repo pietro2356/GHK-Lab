@@ -1,36 +1,53 @@
 @let ion = ionIn();
 <p-card [style]="{ width: '25rem', overflow: 'hidden' }">
   <ng-template #header>
-    <p class="font-medium text-gray-500">{{ion.uuid}}</p>
+    <p class="font-medium text-gray-500">{{ion.getUUID()}}</p>
   </ng-template>
+
+  <!-- NAME & CHARGE -->
   <ng-template #title >
-    <div class="flex flex-column justify-end-safe gap-2">
-      <input type="text" pInputText [(ngModel)]="ion.name" placeholder="Nome dello ione"/>
+    <div class="mb-2 flex flex-row justify-start items-center-safe gap-4">
+      <input
+        type="text"
+        pInputText
+        [ngModel]="ion.getName()"
+        (ngModelChange)="ion.setName($event)"
+        placeholder="Nome dello ione"
+        class="w-full"
+      />
+    </div>
+    <div class="mb-2 mt-2 flex flex-row justify-between items-center-safe">
+      <p>Carica:</p>
       <p-selectbutton
         [options]="chargeOptions"
-        [(ngModel)]="ionIn().charge"
+        (onChange)="ion.setCharge($event.value)"
+        [ngModel]="ion.getCharge()"
       />
     </div>
   </ng-template>
+
+  <!-- PERMEABILITY -->
   <ng-template #content>
     <div class="mb-2 mt-2">
       <p>Permeabilità ione:</p>
       <div class="flex flex-row justify-items-center items-center gap-4">
         <p-slider
-          [(ngModel)]="ion.permeability"
+          (onChange)="ion.setPermeability($event.value || 0)"
+          [ngModel]="ion.getPermeability()"
           style="width: 100%"
           [min]="PERMEABILITY_MIN_VALUE"
           [max]="PERMEABILITY_MAX_VALUE"
         />
         <p-inputnumber
-          [(ngModel)]="ion.permeability"
           [showButtons]="true"
           buttonLayout="horizontal"
           spinnerMode="vertical"
           inputId="vertical"
           [inputStyle]="{ width: '4rem' }"
           [min]="PERMEABILITY_MIN_VALUE"
-          [max]="PERMEABILITY_MAX_VALUE"
+          [max]="PERMEABILITY_MAX_VALUE"ù
+          [ngModel]="ion.getPermeability()"
+          (onInput)="ion.setPermeability(parseFloat($event.value?.toString() || '0') || 0)"
         >
           <ng-template #incrementbuttonicon>
             <span class="pi pi-plus"></span>
@@ -42,17 +59,20 @@
       </div>
     </div>
 
+    <!-- CONCENTRATION IN -->
     <div class="mb-2">
       <p>Concentrazione In:</p>
       <div class="flex flex-row justify-items-center items-center gap-4">
         <p-slider
-          [(ngModel)]="ion.concentrationIn"
+          (onChange)="ion.setConcentrationIn($event.value || 0)"
+          [ngModel]="ion.getConcentrationIn()"
           style="width: 100%"
           [min]="CONC_IN_MIN_VALUE"
           [max]="CONC_IN_MAX_VALUE"
         />
         <p-inputnumber
-          [(ngModel)]="ion.concentrationIn"
+          [ngModel]="ion.getConcentrationIn()"
+          (onInput)="ion.setConcentrationIn(parseFloat($event.value?.toString() || '0') || 0)"
           [showButtons]="true"
           buttonLayout="horizontal"
           spinnerMode="vertical"
@@ -71,17 +91,20 @@
       </div>
     </div>
 
+    <!-- CONCENTRATION OUT -->
     <div class="mb-2">
       <p>Concentrazione Out: </p>
       <div class="flex flex-row justify-items-center items-center gap-4">
         <p-slider
-          [(ngModel)]="ion.concentrationOut"
+          (onChange)="ion.setConcentrationOut($event.value || 0)"
+          [ngModel]="ion.getConcentrationOut()"
           style="width: 100%"
           [min]="CONC_OUT_MIN_VALUE"
           [max]="CONC_OUT_MAX_VALUE"
         />
         <p-inputnumber
-          [(ngModel)]="ion.concentrationOut"
+          [ngModel]="ion.getConcentrationOut()"
+          (onInput)="ion.setConcentrationOut(parseFloat($event.value?.toString() || '0') || 0)"
           [showButtons]="true"
           buttonLayout="horizontal"
           spinnerMode="vertical"
@@ -103,7 +126,7 @@
 
   <ng-template #footer>
     <div class="mt-1 flex justify-end">
-      <p-button label="Rimuovi" severity="secondary" (onClick)="removeCard()"/>
+      <p-button label="Rimuovi" severity="secondary" (onClick)="ghkSrv.removeIon(ion)"/>
     </div>
   </ng-template>
 </p-card>
