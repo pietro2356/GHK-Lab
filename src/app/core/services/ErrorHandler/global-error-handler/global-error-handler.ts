@@ -12,7 +12,7 @@ export class GlobalErrorHandler implements ErrorHandler {
     } else if (error instanceof CalculationError) {
       console.error('CalculationError:', error.message);
     } else {
-      console.error('Generic error type:', error.message);
+      console.error('Generic error type:', error);
     }
   }
 }
