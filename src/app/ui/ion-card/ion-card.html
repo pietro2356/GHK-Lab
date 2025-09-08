@@ -1,11 +1,13 @@
 @let ion = ionIn();
-<p-card [style]="{ width: '25rem', overflow: 'hidden' }">
+<p-card
+  class="bg-gray-800 border border-gray-700 text-white overflow-hidden xl:w-md sm:w-sm">
+<!--  [style]="{ width: '25rem', overflow: 'hidden' }"-->
   <ng-template #header>
     <p class="font-medium text-gray-500">{{ion.getUUID()}}</p>
   </ng-template>
 
   <!-- NAME & CHARGE -->
-  <ng-template #title >
+  <ng-template #title>
     <div class="mb-2 flex flex-row justify-start items-center-safe gap-4">
       <input
         type="text"
@@ -16,7 +18,7 @@
         class="w-full"
       />
     </div>
-    <div class="mb-2 mt-2 flex flex-row justify-between items-center-safe">
+    <div class="mb-2 mt-2 flex flex-row flex-wrap justify-between items-center-safe">
       <p>Carica:</p>
       <p-selectbutton
         [options]="chargeOptions"
@@ -30,7 +32,7 @@
   <ng-template #content>
     <div class="mb-2 mt-2">
       <p>Permeabilità ione:</p>
-      <div class="flex flex-row justify-items-center items-center gap-4">
+      <div class="flex flex-row flex-wrap justify-items-center items-center gap-4 pt-4">
         <p-slider
           (onChange)="ion.setPermeability($event.value || 0)"
           [ngModel]="ion.getPermeability()"
@@ -62,7 +64,7 @@
     <!-- CONCENTRATION IN -->
     <div class="mb-2">
       <p>Concentrazione In:</p>
-      <div class="flex flex-row justify-items-center items-center gap-4">
+      <div class="flex flex-row flex-wrap justify-items-center items-center gap-4 pt-4">
         <p-slider
           (onChange)="ion.setConcentrationIn($event.value || 0)"
           [ngModel]="ion.getConcentrationIn()"
@@ -94,7 +96,7 @@
     <!-- CONCENTRATION OUT -->
     <div class="mb-2">
       <p>Concentrazione Out: </p>
-      <div class="flex flex-row justify-items-center items-center gap-4">
+      <div class="flex flex-row flex-wrap justify-items-center items-center gap-4 pt-4">
         <p-slider
           (onChange)="ion.setConcentrationOut($event.value || 0)"
           [ngModel]="ion.getConcentrationOut()"

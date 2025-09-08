@@ -1,31 +1,35 @@
-@let res = ghkSrv.results();
-@if (res.ready) {
-  <p class="text-3xl font-bold">
-    Potential: {{res.potential.toFixed(2)}} mV
-  </p>
-  <ul>
-    @for (nRes of res.ionResults; track nRes.uuid) {
-      <li class="flex flex-col gap-0.5">
-        <h3 class="text-3xl text-orange-400 font-bold">
-          {{nRes.name}}:
-        </h3>
-        <div class="flex flex-row gap-2">
-          <p class="font-bold">
-            Nerst Potential:
+<div class="border-2 border-amber-700 min-w-2xs max-w-2xl mx-auto py-8 sm:px-6 lg:px-10 flex flex-col flex-wrap justify-start items-start-safe gap-6 ">
+  <h2 class="text-4xl font-bold text-amber-400">
+    Results
+  </h2>
+  @let res = ghkSrv.results();
+  @if (res.ready) {
+    <p class="text-2xl font-bold">
+      Potential: {{res.potential.toFixed(2)}} mV
+    </p>
+    <hr>
+    <ul>
+      @for (nRes of res.ionResults; track nRes.uuid) {
+        <li class="flex flex-col gap-0.5">
+          <p class="text-3xl text-orange-400 w-2xs font-bold whitespace-nowrap overflow-hidden break-all text-ellipsis">
+            {{nRes.name}}:
           </p>
-          <p class="font-mono text-gray-300">{{nRes.nerstPotential.toFixed(2)}} mV</p>
-        </div>
-        <div class="flex flex-row gap-2">
-          <p class="font-bold">
-            Driving force:
-          </p>
-          <p class="font-mono text-gray-300">{{nRes.drivingForce.toFixed(2)}} mV</p>
-        </div>
-      </li>
-    }
-  </ul>
-}@else{
-  <p class="text-3xl font-bold text-red-400">
-    Results not ready
-  </p>
-}
+          <div class="flex flex-row gap-2">
+            <p class="font-bold">
+              Nerst Potential:
+            </p>
+            <p class="font-mono text-gray-300">{{nRes.nerstPotential.toFixed(2)}} mV</p>
+          </div>
+          <div class="flex flex-row gap-2">
+            <p class="font-bold">
+              Driving force:
+            </p>
+            <p class="font-mono text-gray-300">{{nRes.drivingForce.toFixed(2)}} mV</p>
+          </div>
+        </li>
+      }
+    </ul>
+  }@else{
+    <p class="text-gray-400">Add ions to see the results.</p>
+  }
+</div>

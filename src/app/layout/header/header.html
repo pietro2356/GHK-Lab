@@ -1,1 +1,28 @@
-<p>header works!</p>
+<header class="text-gray-100 shadow-sm border-b border-b-gray-700">
+  <div>
+    <div class="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8 flex flex-row justify-between items-center-safe">
+      <div class="flex flex-row justify-start items-center-safe gap-4">
+        <!-- LOGO -->
+        <h1 class="text-3xl font-bold text-amber-400">
+          GHK Calculator
+        </h1>
+
+        <!-- TEMPERATURE -->
+        <div class="flex flex-row justify-start items-center-safe gap-6">
+          <label for="temperature" class="font-bold text-gray-200">Temperature (K):</label>
+          <input
+            id="temperature"
+            type="number"
+            [(ngModel)]="ghkSrv.temperature"
+            class="bg-gray-800 border border-gray-700 text-white rounded-md p-2 w-24"
+            placeholder="Temperature (K)"
+            min="250"
+            max="400"
+          />
+          <p-button label="Add Ion" (onClick)="ghkSrv.addEmptyIon()"/>
+      </div>
+
+    </div>
+  </div>
+  </div>
+</header>
