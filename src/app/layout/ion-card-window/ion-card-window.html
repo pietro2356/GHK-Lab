@@ -1,4 +1,4 @@
-<div class="max-w-6xl mx-auto py-4 px-4 sm:px-6 lg:px-8 flex flex-row flex-wrap justify-center-safe items-center-safe gap-4 mt-4 max-h-[70vh] overflow-y-auto">
+<div class="max-w-6xl mx-auto py-4 flex flex-row flex-wrap justify-center-safe items-center-safe gap-4 mt-4 max-h-[70vh] overflow-y-auto">
   @for (ion of ghkSrv.ionList(); track ion.getUUID()) {
     <ghk-ion-card [ionIn]="ion"/>
   } @empty {

@@ -26,22 +26,5 @@ import { FormsModule } from '@angular/forms';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GhkLab {
-  ghkSrv = inject(GHKervice);
-
-  ion: Ion = {
-    uuid: self.crypto.randomUUID(),
-    name: '',
-    charge: '+',
-    permeability: 1,
-    concentrationOut: 10,
-    concentrationIn: 100,
-  };
-
-  calcErr() {
-    throw new CalculationError('Errore di calcolo');
-  }
-
-  inputErr() {
-    throw new InputValueError('Errore di input');
-  }
+  readonly ghkSrv = inject(GHKervice);
 }

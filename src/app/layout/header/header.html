@@ -1,27 +1,55 @@
 <header class="text-gray-100 shadow-sm border-b border-b-gray-700">
   <div>
-    <div class="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8 flex flex-row justify-between items-center-safe">
-      <div class="flex flex-row justify-start items-center-safe gap-4">
+    <div class="max-w-7xl py-4 px-4 sm:px-6 lg:px-8 flex flex-row justify-between items-center-safe">
+      <div class="flex flex-row flex-wrap justify-start items-center-safe gap-4">
         <!-- LOGO -->
         <h1 class="text-3xl font-bold text-amber-400">
           GHK Calculator
         </h1>
 
         <!-- TEMPERATURE -->
-        <div class="flex flex-row justify-start items-center-safe gap-6">
-          <label for="temperature" class="font-bold text-gray-200">Temperature (K):</label>
+        <div class="flex flex-row flex-wrap justify-start items-center-safe gap-6">
+          <label for="temperature" class="font-bold text-gray-200">Temperature (C):</label>
           <input
             id="temperature"
             type="number"
             [(ngModel)]="ghkSrv.temperature"
             class="bg-gray-800 border border-gray-700 text-white rounded-md p-2 w-24"
-            placeholder="Temperature (K)"
-            min="250"
-            max="400"
+            placeholder="Temperature (C)"
+            min="0"
+            max="100"
+            step=".5"
           />
-          <p-button label="Add Ion" (onClick)="ghkSrv.addEmptyIon()"/>
-      </div>
 
+          <!-- Add Ion Button -->
+          <p-button
+            label="Add Ion"
+            icon="pi pi-plus"
+            [class]="'hidden sm:block'"
+            size="small"
+            (onClick)="ghkSrv.addEmptyIon()"
+          />
+
+          <!-- Mobile Add Ion -->
+          <p-button
+            icon="pi pi-plus"
+            [class]="'sm:hidden'"
+            size="small"
+            [text]="true"
+            (onClick)="ghkSrv.addEmptyIon()"
+            pTooltip="Add Ion"
+          />
+
+          <!-- Results Button (Mobile/Tablet) -->
+          <p-button
+            icon="pi pi-chart-line"
+            label="Results"
+            [class]="'md:hidden'"
+            size="small"
+            severity="warn"
+            (onClick)="scrollToResults()"
+          />
+        </div>
     </div>
   </div>
   </div>

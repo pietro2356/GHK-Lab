@@ -11,5 +11,5 @@ import { GHKervice } from '@core/services/GHK/ghk/ghk';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class IonCardWindow {
-  ghkSrv = inject(GHKervice);
+  readonly ghkSrv = inject(GHKervice);
 }

@@ -21,7 +21,8 @@ import { IonProvidingError } from '@core/errors/IonProvidingError';
 })
 export class GHKervice {
   public ionList = signal<CIon[]>(ionConfig.standardIons); // ionConfig.standardIons
-  public temperature = signal<number>(310); // K
+  private temperatureKelvin = computed(() => this.setTemperatureCelsius(this.temperature())); // Kelvin
+  public temperature = signal<number>(37); // Celsius
 
   public results = computed<Results>(() => {
     const potential = this.calculateMembranePotential(this.ionList());
@@ -46,31 +47,18 @@ export class GHKervice {
   /**
    * @public
    * @description Set the temperature in Kelvin provided in Celsius
-   * @param temperature Temperature in Kelvin
+   * @param tempCelsius Temperature in Celsius
    *
    * @throws {InputValueError} If the temperature is below absolute zero (-273.15 °C)
    */
-  public setTemperatureCelsius(temperature: number): void {
-    if (temperature < -273.15) {
-      throw new InputValueError('Temperature cannot be below absolute zero (-273.15 °C)');
+  public setTemperatureCelsius(tempCelsius: number): number {
+    if (tempCelsius < 0 || tempCelsius > 100) {
+      throw new InputValueError('Temperature must be between 0 and 100 °C');
     }
+    if (tempCelsius === null) throw new InputValueError('Temperature cannot be null');
 
-    let res = number(add(multiply(temperature, 1.0), 273.15));
-    this.temperature.set(number(format(res, { notation: 'fixed', precision: 2 })));
-  }
-
-  /**
-   * @public
-   * @description Set the temperature in Kelvin
-   * @param temperature Temperature in Celsius
-   *
-   * @throws {InputValueError} If the temperature is below absolute zero (0° K)
-   */
-  public setTemperatureKelvin(temperature: number): void {
-    if (temperature < 0) {
-      throw new InputValueError('Temperature cannot be below absolute zero (0 K)');
-    }
-    this.temperature.set(temperature);
+    let res = number(add(multiply(tempCelsius, 1.0), 273.15));
+    return number(format(res, { notation: 'fixed', precision: 2 }));
   }
 
   /**
@@ -164,7 +152,7 @@ export class GHKervice {
       //throw new CalculationError('Ion list is empty. Please add at least one ion.');
     }
 
-    let potential = number(multiply(GAS_CONSTANT, this.temperature()) / FARADAY_CONSTANT);
+    let potential = number(multiply(GAS_CONSTANT, this.temperatureKelvin()) / FARADAY_CONSTANT);
     let externalContribution: number = 0;
     let internalContribution: number = 0;
     for (const ion of ionList) {
@@ -200,7 +188,7 @@ export class GHKervice {
     }
 
     let potential = number(
-      multiply(GAS_CONSTANT, this.temperature()) /
+      multiply(GAS_CONSTANT, this.temperatureKelvin()) /
         multiply(ion.getChargeNumber(), FARADAY_CONSTANT),
     );
 

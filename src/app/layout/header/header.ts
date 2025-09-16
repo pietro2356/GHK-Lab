@@ -11,5 +11,12 @@ import { Button } from 'primeng/button';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Header {
-  ghkSrv = inject(GHKervice);
+  readonly ghkSrv = inject(GHKervice);
+
+  protected scrollToResults() {
+    const resultsSection = document.getElementById('results');
+    if (resultsSection) {
+      resultsSection.scrollIntoView({ behavior: 'smooth', block: 'end' });
+    }
+  }
 }

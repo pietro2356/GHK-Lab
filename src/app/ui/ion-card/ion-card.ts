@@ -33,10 +33,10 @@ import { GHKervice } from '@core/services/GHK/ghk/ghk';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class IonCard {
-  ghkSrv = inject(GHKervice);
-  ionIn = input.required<CIon>();
+  readonly ghkSrv = inject(GHKervice);
+  readonly ionIn = input.required<CIon>();
 
-  chargeOptions = [
+  readonly chargeOptions = [
     { label: '-2', value: '-2' },
     { label: '-1', value: '-' },
     { label: '0', value: '0' },
