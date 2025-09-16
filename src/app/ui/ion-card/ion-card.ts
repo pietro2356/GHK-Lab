@@ -13,8 +13,8 @@ import {
   CONC_OUT_MIN_VALUE,
   PERMEABILITY_MAX_VALUE,
   PERMEABILITY_MIN_VALUE,
-} from '../../core/constant/constant';
-import { CIon } from '../../core/models/Ion';
+} from '@core/constant/constant';
+import { CIon } from '@core/models/Ion';
 import { GHKervice } from '@core/services/GHK/ghk/ghk';
 
 @Component({
