@@ -11,8 +11,6 @@ export interface Ion {
   concentrationIn: number; // [Ion]in
 }
 
-export type IonSignal = WritableSignal<Ion>; // signal = permeability * concentrationOut / concentrationIn
-
 export class CIon {
   ion: WritableSignal<Ion>;
 

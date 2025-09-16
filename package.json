@@ -4,6 +4,8 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
+    "start-global": "ng serve --host 0.0.0.0",
+    "start-ssl": "ng serve --host 192.168.0.21 --ssl --ssl-key ./server/server.key --ssl-cert ./server/server.crt",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
